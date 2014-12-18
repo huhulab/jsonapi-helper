@@ -1,0 +1,63 @@
+{
+  "posts": [{
+    "id": "1",
+    "title": "Post Title 1",
+    "links": {
+      "author": "9",
+      "comments": [ "1", "2", "3" ]
+    }
+  },
+  {
+    "id": "2",
+    "title": "Post Title 2",
+    "links": {
+      "author": "9",
+      "comments": [ "4", "5" ]
+    }
+  },
+  {
+    "id": "3",
+    "title": "Post Title 3",
+    "links": {
+      "author": "9",
+      "comments": [ "6" ]
+    }
+  }],
+  "links": {
+    "posts.author": {
+      "href": "/people/{posts.author}",
+      "type": "people"
+    },
+    "posts.comments": "/comments/{posts.comments}"
+  },
+  "linked": {
+    "people": [{
+      "id": "9",
+      "name": "@P9"
+    }],
+    "comments": [{
+      "id": "1",
+      "body": "Comment 1"
+    },
+    {
+      "id": "2",
+      "body": "Comment 2"
+    },
+    {
+      "id": "3",
+      "body": "Comment 3"
+    },
+    {
+      "id": "4",
+      "body": "Comment 4"
+    },
+    {
+      "id": "5",
+      "body": "Comment 5"
+    },
+    {
+      "id": "6",
+      "body": "Comment 6"
+    }]
+  }
+}

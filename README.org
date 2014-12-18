@@ -1,0 +1,147 @@
+* jsonapi-helper
+
+This project provide a simple helper for [[http://jsonapi.org/][JSONAPI]] spec, which just convert the
+response JSON with a top-level `linked` properties to embedded-object format response JSON
+without the `linked` property.
+
+Say, if your response is like this:
+
+#+BEGIN_SRC javascript
+var posts = {
+  "posts": [{
+    "id": "1",
+    "title": "Post Title 1",
+    "links": {
+      "author": "9",
+      "comments": [ "1", "2", "3" ]
+    }
+  },
+  {
+    "id": "2",
+    "title": "Post Title 2",
+    "links": {
+      "author": "9",
+      "comments": [ "4", "5" ]
+    }
+  },
+  {
+    "id": "3",
+    "title": "Post Title 3",
+    "links": {
+      "author": "9",
+      "comments": [ "6" ]
+    }
+  }],
+  "links": {
+    "posts.author": {
+      "href": "/people/{posts.author}",
+      "type": "people"
+    },
+    "posts.comments": "/comments/{posts.comments}"
+  },
+  "linked": {
+    "people": [{
+      "id": "9",
+      "name": "@P9"
+    }],
+    "comments": [{
+      "id": "1",
+      "body": "Comment 1"
+    },
+    {
+      "id": "2",
+      "body": "Comment 2"
+    },
+    {
+      "id": "3",
+      "body": "Comment 3"
+    },
+    {
+      "id": "4",
+      "body": "Comment 4"
+    },
+    {
+      "id": "5",
+      "body": "Comment 5"
+    },
+    {
+      "id": "6",
+      "body": "Comment 6"
+    }]
+  }
+}
+#+END_SRC
+
+Make a helper and then expand:
+
+#+BEGIN_SRC javascript
+var jsonapiHelper = new JSONAPIHelper(post);
+console.log(JSON.stringify(expand, null, 2));
+#+END_SRC
+
+And you will get this:
+
+#+BEGIN_SRC javascript;
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "Post Title 1",
+      "author": {
+        "id": "9",
+        "name": "@P9"
+      },
+      "comments": [
+        {
+          "id": "1",
+          "body": "Comment 1"
+        },
+        {
+          "id": "2",
+          "body": "Comment 2"
+        },
+        {
+          "id": "3",
+          "body": "Comment 3"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Post Title 2",
+      "author": {
+        "id": "9",
+        "name": "@P9"
+      },
+      "comments": [
+        {
+          "id": "4",
+          "body": "Comment 4"
+        },
+        {
+          "id": "5",
+          "body": "Comment 5"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Post Title 3",
+      "author": {
+        "id": "9",
+        "name": "@P9"
+      },
+      "comments": [
+        {
+          "id": "6",
+          "body": "Comment 6"
+        }
+      ]
+    }
+  ]
+}
+#+END_SRC
+
+Currently, it only =expand= by getting data from =linked= property. It's
+complicated to get data directly via HTTP when response has =links= property
+but no =linked= property.

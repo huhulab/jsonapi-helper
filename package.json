@@ -1,0 +1,38 @@
+{
+  "name": "jsonapi-helper",
+  "version": "0.0.0",
+  "description": "A JSONAPI helper to make life easy with JSONAPI response.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:huhulab/jsonapi-helper"
+  },
+  "keywords": [
+    "JSONAPI"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "popsicle": "^0.3.2",
+    "popsicle-prefix": "^0.0.1",
+    "es6-promise": "^2.0.1",
+    "chai": "^1.9.1",
+    "mocha": "~2.0.1",
+    "express": "^4.10.6",
+    "gulp": "^3.8.6",
+    "gulp-jshint": "^1.8.4",
+    "gulp-watch": "^3.0.0",
+    "gulp-mocha": "^1.1.0",
+    "mocha": "^1.21.3",
+    "require-dir": "^0.1.0"
+  },
+  "author": "Xiao Hanyu",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/huhulab/jsonapi-helper/issues"
+  },
+  "homepage": "https://github.com/huhulab/jsonapi-helper"
+}
