@@ -1,8 +1,8 @@
 * jsonapi-helper
 
 This project provide a simple helper for [[http://jsonapi.org/][JSONAPI]] spec, which just convert the
-response JSON with a top-level `linked` properties to embedded-object format response JSON
-without the `linked` property.
+response JSON with a top-level =linked= properties to embedded-object format response JSON
+without the =linked= property.
 
 Say, if your response is like this:
 
@@ -76,6 +76,7 @@ Make a helper and then expand:
 
 #+BEGIN_SRC javascript
 var jsonapiHelper = new JSONAPIHelper(post);
+var expand = jsonapiHelper.expand();
 console.log(JSON.stringify(expand, null, 2));
 #+END_SRC
 
