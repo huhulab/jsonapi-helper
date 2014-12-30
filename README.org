@@ -1,10 +1,19 @@
 * jsonapi-helper
 
+#+BEGIN_HTML
+<a href=https://travis-ci.org/huhulab/jsonapi-helper>
+<img src="https://travis-ci.org/huhulab/jsonapi-helper.svg?branch=master" alt="Build
+Status"></img>
+</a>
+#+END_HTML
+
+
 This project provide a simple helper for [[http://jsonapi.org/][JSONAPI]] spec, which just convert the
 response JSON with a top-level =linked= properties to embedded-object format response JSON
 without the =linked= property.
 
-Say, if your response is like this:
+** Expand for collection
+Say, if your response is a collection keyed by some primary key like this:
 
 #+BEGIN_SRC javascript
 var posts = {
@@ -68,7 +77,8 @@ var posts = {
       "id": "6",
       "body": "Comment 6"
     }]
-  }
+  },
+  "meta": {}
 }
 #+END_SRC
 
@@ -80,11 +90,14 @@ var expand = jsonapiHelper.expand();
 console.log(JSON.stringify(expand, null, 2));
 #+END_SRC
 
-And you will get this:
+And you will get a general expanded object, in which the primary key is
+generalized as =data= for ease of client processing, and it also keeps =meta=
+info for you:
 
-#+BEGIN_SRC javascript;
+#+BEGIN_SRC javascript
 {
-  "posts": [
+  "meta": {},
+  "data": [
     {
       "id": "1",
       "title": "Post Title 1",
@@ -142,6 +155,96 @@ And you will get this:
   ]
 }
 #+END_SRC
+
+** Expand for item
+
+Or, if your response is an item keyed by some primary key like this:
+
+#+BEGIN_SRC emacs-lisp
+var post = {
+  "posts": {
+    "id": "100",
+    "title": "Post Title 100",
+    "links": {
+      "author": "348",
+      "comments": [
+        "752",
+        "194",
+        "961"
+      ]
+    }
+  },
+  "links": {
+    "posts.author": {
+      "href": "/people/{posts.author}",
+      "type": "people"
+    },
+    "posts.comments": {
+      "href": "/comments/{posts.comments}",
+      "type": "comments"
+    }
+  },
+  "linked": {
+    "people": [
+      {
+        "id": "348",
+        "name": "@P348"
+      }
+    ],
+    "comments": [
+      {
+        "id": "752",
+        "body": "Comment 752"
+      },
+      {
+        "id": "194",
+        "body": "Comment 194"
+      },
+      {
+        "id": "961",
+        "body": "Comment 961"
+      }
+    ]
+  }
+}
+#+END_SRC
+
+Make a helper and then expand:
+
+#+BEGIN_SRC javascript
+var jsonapiHelper = new JSONAPIHelper(post);
+var expand = jsonapiHelper.expand();
+console.log(JSON.stringify(expand, null, 2));
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+{
+  "id": "100",
+  "title": "Post Title 100",
+  "author": {
+    "id": "348",
+    "name": "@P348"
+  },
+  "comments": [
+    {
+      "id": "752",
+      "body": "Comment 752"
+    },
+    {
+      "id": "194",
+      "body": "Comment 194"
+    },
+    {
+      "id": "961",
+      "body": "Comment 961"
+    }
+  ]
+}
+#+END_SRC
+
+And you will get a expanded object, in which both the original primary key and
+the =meta= is removed, just a single, isolated object for you, simply and
+directly.
 
 Currently, it only =expand= by getting data from =linked= property. It's
 complicated to get data directly via HTTP when response has =links= property

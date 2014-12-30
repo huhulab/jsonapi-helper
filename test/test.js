@@ -236,7 +236,7 @@ describe('jsonapi-helper expand', function () {
     return popsicle('/empty').use(prefix(REMOTE_URL))
       .then(function (res) {
         var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-        expect(jsonapiHelper.expand()).to.be.eql({empty: []});
+        expect(jsonapiHelper.expand()).to.be.eql({data: []});
       });
   });
 
@@ -244,7 +244,7 @@ describe('jsonapi-helper expand', function () {
     return popsicle('/empty/100').use(prefix(REMOTE_URL))
       .then(function (res) {
         var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-        expect(jsonapiHelper.expand()).to.be.eql({empty: {}});
+        expect(jsonapiHelper.expand()).to.be.eql({});
       });
   });
 
@@ -257,19 +257,20 @@ describe('jsonapi-helper expand', function () {
            var expand = jsonapiHelper.expand();
            jsonapiHelper.expand();
 
-           expect(expand).to.have.property('posts');
+           expect(expand).to.have.property('data');
 
            // Yay! Idempotent `expand`
            expect(jsonapiHelper.expand()).to.be.eql(expand);
 
-           expect(jsonapiHelper.expand()).to.have.property('posts');
-           expect(jsonapiHelper.expand().posts[0])
+           expect(jsonapiHelper.expand()).to.have.property('data');
+           expect(jsonapiHelper.expand().data).to.be.an('array');
+           expect(jsonapiHelper.expand().data[0])
              .to.have.property('author');
-           expect(jsonapiHelper.expand().posts[0])
+           expect(jsonapiHelper.expand().data[0])
              .to.have.property('comments');
            expect(jsonapiHelper.expand()).to.not.have.property('links');
            expect(jsonapiHelper.expand()).to.not.have.property('linked');
-           expect(jsonapiHelper.expand()).to.not.have.property('meta');
+           expect(jsonapiHelper.expand()).to.have.property('meta');
          });
      });
 
@@ -278,23 +279,24 @@ describe('jsonapi-helper expand', function () {
        return popsicle('/comments').use(prefix(REMOTE_URL))
          .then(function (res) {
            var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-           expect(jsonapiHelper.expand())
-             .to.be.eql(jsonapiHelper._jsonapiObject);
-           expect(jsonapiHelper.expand()).to.have.property('comments');
+           expect(jsonapiHelper.expand().data)
+             .to.be.eql(jsonapiHelper._jsonapiObject.comments);
+           expect(jsonapiHelper.expand()).to.have.property('data');
            expect(jsonapiHelper.expand()).to.not.have.property('links');
            expect(jsonapiHelper.expand()).to.not.have.property('linked');
-           expect(jsonapiHelper.expand()).to.not.have.property('meta');
+           expect(jsonapiHelper.expand()).to.have.property('meta');
          });
      });
 
-  it('xx should expand properly for items with `links` and `linked` format',
+  it('should expand properly for items with `links` and `linked` format',
      function () {
        return popsicle('/posts/100').use(prefix(REMOTE_URL))
          .then(function (res) {
            var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-           expect(jsonapiHelper.expand()).to.have.property('posts');
-           expect(jsonapiHelper.expand().posts).to.have.property('author');
-           expect(jsonapiHelper.expand().posts).to.have.property('comments');
+           expect(jsonapiHelper.expand()).to.be.an('object');
+           expect(jsonapiHelper.expand()).to.not.have.property('posts');
+           expect(jsonapiHelper.expand()).to.have.property('author');
+           expect(jsonapiHelper.expand()).to.have.property('comments');
            expect(jsonapiHelper.expand()).to.not.have.property('links');
            expect(jsonapiHelper.expand()).to.not.have.property('linked');
            expect(jsonapiHelper.expand()).to.not.have.property('meta');
@@ -306,7 +308,8 @@ describe('jsonapi-helper expand', function () {
        return popsicle('/comments/100').use(prefix(REMOTE_URL))
          .then(function (res) {
            var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-           expect(jsonapiHelper.expand()).to.have.property('comments');
+           expect(jsonapiHelper.expand()).to.be.an('object');
+           expect(jsonapiHelper.expand()).to.not.have.property('comments');
            expect(jsonapiHelper.expand()).to.not.have.property('links');
            expect(jsonapiHelper.expand()).to.not.have.property('linked');
            expect(jsonapiHelper.expand()).to.not.have.property('meta');
