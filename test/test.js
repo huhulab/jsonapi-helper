@@ -235,16 +235,16 @@ describe('jsonapi-helper expand', function () {
   it('should expand properly with empty collection', function () {
     return popsicle('/empty').use(prefix(REMOTE_URL))
       .then(function (res) {
-        var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-        expect(jsonapiHelper.expand()).to.be.eql({data: []});
+        new JSONAPIHelper(res.body, REMOTE_URL).expand();
+        expect(res.body).to.be.eql({data: []});
       });
   });
 
   it('should expand properly with empty item', function () {
     return popsicle('/empty/100').use(prefix(REMOTE_URL))
       .then(function (res) {
-        var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-        expect(jsonapiHelper.expand()).to.be.eql({});
+        new JSONAPIHelper(res.body, REMOTE_URL).expand();
+        expect(res.body).to.be.eql({});
       });
   });
 
@@ -252,25 +252,19 @@ describe('jsonapi-helper expand', function () {
      function () {
        return popsicle('/posts').use(prefix(REMOTE_URL))
          .then(function (res) {
-           var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
+           new JSONAPIHelper(res.body, REMOTE_URL).expand();
 
-           var expand = jsonapiHelper.expand();
-           jsonapiHelper.expand();
+           expect(res.body).to.have.property('data');
 
-           expect(expand).to.have.property('data');
-
-           // Yay! Idempotent `expand`
-           expect(jsonapiHelper.expand()).to.be.eql(expand);
-
-           expect(jsonapiHelper.expand()).to.have.property('data');
-           expect(jsonapiHelper.expand().data).to.be.an('array');
-           expect(jsonapiHelper.expand().data[0])
+           expect(res.body).to.have.property('data');
+           expect(res.body.data).to.be.an('array');
+           expect(res.body.data[0])
              .to.have.property('author');
-           expect(jsonapiHelper.expand().data[0])
+           expect(res.body.data[0])
              .to.have.property('comments');
-           expect(jsonapiHelper.expand()).to.not.have.property('links');
-           expect(jsonapiHelper.expand()).to.not.have.property('linked');
-           expect(jsonapiHelper.expand()).to.have.property('meta');
+           expect(res.body).to.not.have.property('links');
+           expect(res.body).to.not.have.property('linked');
+           expect(res.body).to.have.property('meta');
          });
      });
 
@@ -278,13 +272,11 @@ describe('jsonapi-helper expand', function () {
      function () {
        return popsicle('/comments').use(prefix(REMOTE_URL))
          .then(function (res) {
-           var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-           expect(jsonapiHelper.expand().data)
-             .to.be.eql(jsonapiHelper._jsonapiObject.comments);
-           expect(jsonapiHelper.expand()).to.have.property('data');
-           expect(jsonapiHelper.expand()).to.not.have.property('links');
-           expect(jsonapiHelper.expand()).to.not.have.property('linked');
-           expect(jsonapiHelper.expand()).to.have.property('meta');
+           new JSONAPIHelper(res.body, REMOTE_URL).expand();
+           expect(res.body).to.have.property('data');
+           expect(res.body).to.not.have.property('links');
+           expect(res.body).to.not.have.property('linked');
+           expect(res.body).to.have.property('meta');
          });
      });
 
@@ -292,14 +284,14 @@ describe('jsonapi-helper expand', function () {
      function () {
        return popsicle('/posts/100').use(prefix(REMOTE_URL))
          .then(function (res) {
-           var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-           expect(jsonapiHelper.expand()).to.be.an('object');
-           expect(jsonapiHelper.expand()).to.not.have.property('posts');
-           expect(jsonapiHelper.expand()).to.have.property('author');
-           expect(jsonapiHelper.expand()).to.have.property('comments');
-           expect(jsonapiHelper.expand()).to.not.have.property('links');
-           expect(jsonapiHelper.expand()).to.not.have.property('linked');
-           expect(jsonapiHelper.expand()).to.not.have.property('meta');
+           new JSONAPIHelper(res.body, REMOTE_URL).expand();
+           expect(res.body).to.be.an('object');
+           expect(res.body).to.not.have.property('posts');
+           expect(res.body).to.have.property('author');
+           expect(res.body).to.have.property('comments');
+           expect(res.body).to.not.have.property('links');
+           expect(res.body).to.not.have.property('linked');
+           expect(res.body).to.not.have.property('meta');
          });
      });
 
@@ -307,12 +299,12 @@ describe('jsonapi-helper expand', function () {
      function () {
        return popsicle('/comments/100').use(prefix(REMOTE_URL))
          .then(function (res) {
-           var jsonapiHelper = new JSONAPIHelper(res.body, REMOTE_URL);
-           expect(jsonapiHelper.expand()).to.be.an('object');
-           expect(jsonapiHelper.expand()).to.not.have.property('comments');
-           expect(jsonapiHelper.expand()).to.not.have.property('links');
-           expect(jsonapiHelper.expand()).to.not.have.property('linked');
-           expect(jsonapiHelper.expand()).to.not.have.property('meta');
+           new JSONAPIHelper(res.body, REMOTE_URL).expand();
+           expect(res.body).to.be.an('object');
+           expect(res.body).to.not.have.property('comments');
+           expect(res.body).to.not.have.property('links');
+           expect(res.body).to.not.have.property('linked');
+           expect(res.body).to.not.have.property('meta');
          });
      });
 });

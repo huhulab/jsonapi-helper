@@ -85,9 +85,8 @@ var posts = {
 Make a helper and then expand:
 
 #+BEGIN_SRC javascript
-var jsonapiHelper = new JSONAPIHelper(post);
-var expand = jsonapiHelper.expand();
-console.log(JSON.stringify(expand, null, 2));
+new JSONAPIHelper(posts).expand();
+console.log(JSON.stringify(posts, null, 2));
 #+END_SRC
 
 And you will get a general expanded object, in which the primary key is
@@ -212,9 +211,8 @@ var post = {
 Make a helper and then expand:
 
 #+BEGIN_SRC javascript
-var jsonapiHelper = new JSONAPIHelper(post);
-var expand = jsonapiHelper.expand();
-console.log(JSON.stringify(expand, null, 2));
+new JSONAPIHelper(post).expand();
+console.log(JSON.stringify(post, null, 2));
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
