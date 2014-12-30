@@ -4,7 +4,7 @@
   "description": "A JSONAPI helper to make life easy with JSONAPI response.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "gulp lint && gulp test"
   },
   "repository": {
     "type": "git",

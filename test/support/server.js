@@ -38,7 +38,7 @@ var _getRandomArray = function (length) {
   }
 
   return result;
-}
+};
 
 app.get('/posts', function (req, res) {
   res.json(posts);
@@ -76,19 +76,19 @@ app.get('/posts/:id', function (req, res) {
     linked: {
       'people': [{
         id: random4[0],
-        name: "@P" + random4[0]
+        name: '@P' + random4[0]
       }],
       'comments': [{
         id: random4[1],
-        body: "Comment " + random4[1]
+        body: 'Comment ' + random4[1]
       },
       {
         id: random4[2],
-        body: "Comment " + random4[2]
+        body: 'Comment ' + random4[2]
       },
       {
         id: random4[3],
-        body: "Comment " + random4[3]
+        body: 'Comment ' + random4[3]
       }]
     }
   };
